@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+
+<head>
+
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<style type="text/css">
+body {
+	font-size: 16px;
+}
+
+th, td {
+	white-space: nowrap;
+}
+</style>
+
+</head>
+
+<body class="h-100">
+
+	<section class="container-fulwid mx-5 pt-1">
+
+		<h2>テーブル一覧</h2>
+
+		<table th:object="${info.listTable}" class="table table-bordered">
+			<thead>
+				<tr class="table-primary">
+					<th class="w-75">テーブル名</th>
+					<th class="w-25">テーブル操作</th>
+				</tr>
+			</thead>
+			<tbody th:each="tableName : *{tableNames}">
+				<tr>
+					<td th:text="${tableName}">TABLE NAME</td>
+					<td class="text-center"><a class="btn btn-sm btn-info" th:href="@{/dynamodb/{tableName}(tableName=${tableName})}">修正・確認</a></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</section>
+
+</body>
+
+</html>

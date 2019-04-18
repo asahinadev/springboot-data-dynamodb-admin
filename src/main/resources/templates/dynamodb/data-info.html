@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+
+<head>
+
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<style type="text/css">
+body {
+	font-size: 16px;
+}
+
+th, td {
+	white-space: nowrap;
+}
+
+.attribute_name {
+	width: 120px;
+}
+
+.attribute_type {
+	width: 60px;
+	text-align: center;
+}
+
+.attribute_type>input {
+	text-align: center;
+}
+
+.attribute_value {
+	width: auto;
+}
+</style>
+
+</head>
+
+<body class="h-100">
+
+	<section class="container-fulwid mx-5 pt-1">
+
+		<h2>テーブル情報</h2>
+
+		<div th:object="${info.describeTable.table}" class="mb-3">
+
+			<h3>テーブル名</h3>
+
+			<div class="card mb-3">
+				<div class="card-body" th:text="${info.tableName}"></div>
+			</div>
+		</div>
+
+		<h2>データ情報</h2>
+
+		<form class="mb-3" th:method="POST" th:action="@{${info.servletPath}}">
+
+			<table th:object="${info}" class="table table-sm table-bordered  table-striped">
+				<thead class="table-primary">
+					<tr>
+						<th class="attribute_name">NAME</th>
+						<th class="attribute_type">TYPE</th>
+						<th class="attribute_value">VALUE</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr th:each="entry : *{KeyAttributeValues}">
+						<th class="attribute_name" th:text="${entry.key}"></th>
+						<td class="attribute_type" th:text="${#attributeValues.type(entry.value)}"></td>
+						<td class="attribute_value" th:text="${#attributeValues.format(entry.value)}"></td>
+						<td class="d-none">
+							<!--  -->
+							<input type="hidden" th:name="${'types['+entry.key+']'}" th:value="${#attributeValues.type(entry.value)}">
+							<!--  -->
+							<input type="hidden" th:name="${'values['+entry.key+']'}" th:value="${#attributeValues.format(entry.value)}">
+							<!--  -->
+						</td>
+					</tr>
+
+					<tr th:each="entry : *{attributeValues}">
+						<th class="attribute_name" th:text="${entry.key}"></th>
+						<th class="attribute_type">
+							<input type="text" th:name="${'types['+entry.key+']'}" th:value="${#attributeValues.type(entry.value)}" class="form-control">
+						</th>
+						<th class="attribute_value">
+							<input type="text" th:name="${'values['+entry.key+']'}" th:value="${#attributeValues.format(entry.value)}" class="form-control">
+						</th>
+					</tr>
+				</tbody>
+			</table>
+
+			<button class="btn btn-secondary">更新</button>
+		</form>
+
+	</section>
+
+</body>
+
+</html>

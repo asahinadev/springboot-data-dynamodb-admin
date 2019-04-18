@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" class="h-100">
+
+<head>
+
+<meta charset="UTF-8">
+
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/bootstrap/css/bootstrap.min.css}" />
+<link rel="stylesheet" type="text/css" th:href="@{/webjars/font-awesome/css/all.min.css}" />
+
+<script th:src="@{/webjars/jquery/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/js/bootstrap.min.js}"></script>
+
+<style type="text/css">
+body {
+	font-size: 16px;
+}
+
+th, td {
+	white-space: nowrap;
+}
+</style>
+
+</head>
+
+<body class="h-100">
+
+	<section class="container-fulwid mx-5 pt-1">
+
+		<h2>テーブル情報</h2>
+
+		<div th:object="${info.describeTable.table}" class="mb-3">
+
+			<h3>テーブル名</h3>
+
+			<div class="card mb-3">
+				<div class="card-body" th:text="${info.tableName}"></div>
+			</div>
+
+			<h3>キー情報</h3>
+
+			<table class="table table-sm table-bordered mb-3">
+				<thead>
+					<tr class="table-info">
+						<th class="w-25">KEY TYPE</th>
+						<th class="w-75">ATTRIBUTE NAME</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="item : *{keySchema}">
+						<td th:text="${item.keyType}">keyType</td>
+						<td th:text="${item.attributeName}">attributeName</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<h3>テーブル状態</h3>
+
+			<div class="card mb-3" th:classappend="*{#strings.equals(tableStatus,'ACTIVE') ? 'text-white bg-primary':''}">
+				<div class="card-body" th:text="*{tableStatus}"></div>
+			</div>
+
+			<h3>作成日時</h3>
+
+			<div class="card mb-3">
+				<div class="card-body" th:text="*{#dates.format(creationDateTime, 'yyyy-MM-dd HH:mm')}"></div>
+			</div>
+
+			<h3>データサイズ (バイト)</h3>
+
+			<div class="card mb-3">
+				<div class="card-body" th:text="*{#numbers.formatInteger(tableSizeBytes, 1)}"></div>
+			</div>
+
+			<h3>データサイズ (件数)</h3>
+
+			<div class="card mb-3">
+				<div class="card-body" th:text="*{#numbers.formatInteger(itemCount, 1)}"></div>
+			</div>
+
+		</div>
+
+		<h2>テーブル情報</h2>
+
+		<table th:object="${info.scan}" class="mb-3 table table-sm table-bordered  table-striped">
+			<thead>
+				<tr>
+					<th>編集</th>
+					<th class="p-2" th:text="${info.HashKeyName}">attributeName</th>
+					<th class="p-2" th:text="${info.RangeKeyName}">attributeName</th>
+					<th class="p-2" th:each="attributeName : ${info.attributeNames}" th:text="${attributeName}">attributeName</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="row : *{items}">
+					<td>
+						<a th:href="@{/dynamodb/{tableName}/data/{hashKey}/{rangeKey}	(tableName=${info.tableName}, hashKey=${#attributeValues.format(row.get(info.HashKeyName))}, rangeKey=${#attributeValues.format(row.get(info.RangeKeyName))})}">編集</a>
+					</td>
+					<td class="p-2" th:text="${#attributeValues.format(row.get(info.HashKeyName))}">attributeName</td>
+					<td class="p-2" th:text="${#attributeValues.format(row.get(info.RangeKeyName))}">attributeName</td>
+					<td class="p-2" th:each="attributeName : ${info.attributeNames}"       th:text="${#attributeValues.format(row.get(attributeName))}">attributeName</td>
+				</tr>
+			</tbody>
+		</table>
+
+	</section>
+
+</body>
+
+</html>
