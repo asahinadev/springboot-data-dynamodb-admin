@@ -28,3 +28,6 @@ HELP.md
 ### VS Code ###
 .vscode/
 .mvn
+/.gradle/
+/bin/
+/.apt_generated_tests/

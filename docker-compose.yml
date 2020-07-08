@@ -1,0 +1,19 @@
+version: '3'
+
+services:
+    web:
+        image: tomcat:9.0.37-jdk11-openjdk-slim
+        ports:
+            -   9100:8080
+        environment: 
+            DATABASE_NAME:  spring
+            DATABASE_USER:  spring
+            DATABASE_PASS:  spring
+            DATABASE_URL:   jdbc:mysql://db:3306/spring    
+#       volumes: 
+#           -   ./build/libs/demo.war:/usr/local/tomcat/webapps/ROOT.war
+    
+    db:
+        image: amazon/dynamodb-local
+        ports:
+            -   8000 :8000
